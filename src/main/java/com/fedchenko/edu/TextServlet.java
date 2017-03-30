@@ -21,11 +21,11 @@ public class TextServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        PrintWriter out = response.getWriter();
+//        PrintWriter out = response.getWriter();
 
-        ServletContext ctx = null;
+        ServletContext ctx = getServletContext();
         try (InputStream inputstrm = ctx.getResourceAsStream("/WEB-INF/testfile.txt")) {
-            out.print(inputstrm.hashCode());
+            System.out.print(inputstrm.hashCode());
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
