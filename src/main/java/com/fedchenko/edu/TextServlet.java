@@ -38,29 +38,29 @@ public class TextServlet extends HttpServlet {
             ex.printStackTrace();
         }
 
-       String q = request.getParameter("q");
+        String q = request.getParameter("q");
         ServletContext ctx = getServletContext();
         PrintWriter out = response.getWriter();
 
         try (InputStream inputstrm = ctx.getResourceAsStream("/WEB-INF/testfile.txt")) {
-//            out.print("HashCode of stream: " + inputstrm.hashCode() + " ");
+
             String allText = new String(streamToString(inputstrm));
-            out.print(allText);
+//            out.print("LIMIT: " + limit + " ");
+//            out.print("QUERY: " + q + " ");
+//            out.print("LENGTH: " + length + " ");
 
 
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
 
-//        out.print("LIMIT: " + limit + " ");
-//        out.print("QUERY: " + q + " ");
-//        out.print("LENGTH: " + length + " ");
 
     }
 
     protected String streamToString(InputStream input) {
+
         int limit = this.limit;
-        int count = 0;
+//        int count = 0;
         try {
             try (ByteArrayOutputStream result = new ByteArrayOutputStream()) {
                 byte[] buffer = new byte[1024];
@@ -68,7 +68,12 @@ public class TextServlet extends HttpServlet {
                 while ((length = input.read(buffer)) != -1) {
                     result.write(buffer, 0, length);
                 }
-                return result.toString("UTF-8");
+                if (limit < result.toString("UTF-8").length()) {
+                    String strResult = new String(result.toString().substring(0, limit));
+                    return strResult;
+                } else {
+                    return result.toString("UTF-8");
+                }
             }
 
         } catch (IOException e) {
