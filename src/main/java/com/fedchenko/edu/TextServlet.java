@@ -38,7 +38,7 @@ public class TextServlet extends HttpServlet {
             ex.printStackTrace();
         }
 
-//        String q = request.getParameter("q");
+       String q = request.getParameter("q");
         ServletContext ctx = getServletContext();
         PrintWriter out = response.getWriter();
 
