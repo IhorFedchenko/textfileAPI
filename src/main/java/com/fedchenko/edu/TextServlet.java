@@ -45,6 +45,7 @@ public class TextServlet extends HttpServlet {
         try (InputStream inputstrm = ctx.getResourceAsStream("/WEB-INF/testfile.txt")) {
 
             String allText = new String(streamToString(inputstrm));
+            out.print(allText);
 //            out.print("LIMIT: " + limit + " ");
 //            out.print("QUERY: " + q + " ");
 //            out.print("LENGTH: " + length + " ");
