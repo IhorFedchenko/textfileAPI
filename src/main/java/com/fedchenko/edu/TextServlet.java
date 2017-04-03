@@ -12,6 +12,8 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+
+
 @WebServlet("/")
 public class TextServlet extends HttpServlet {
 
@@ -72,7 +74,13 @@ public class TextServlet extends HttpServlet {
                 while ((length = input.read(buffer)) != -1) {
                     result.write(buffer, 0, length);
                 }
-                return result.toString("UTF-8");
+                if (result.toString().length() <= limit) {
+                    return result.toString("UTF-8");
+                } else {
+                    String altResult = new String(result.toString("UTF-8"));
+                    altResult = altResult.substring(0, limit);
+                    return altResult;
+                }
             }
 
         } catch (IOException e) {
@@ -85,16 +93,22 @@ public class TextServlet extends HttpServlet {
     protected ArrayList<String> preJsonData(String input) {
         ArrayList<String> result = new ArrayList<String>();
         String analaze = new String(input);
-        // ?length=5&limit=300
+
+
+        // ?length=5
         if (q.isEmpty() & length > 0) {
-            while (!(analaze.isEmpty())) {
+            int count = 0;
+            while ((!(analaze.isEmpty()))) {
                 if (analaze.length() < length) {
                     result.add(analaze);
+
+
                     break;
                 }
                 if (analaze.length() > length) {
                     result.add(analaze.substring(0, length));
                     analaze = analaze.substring(length);
+                    count = count + length;
                 }
             }
         }
@@ -104,8 +118,8 @@ public class TextServlet extends HttpServlet {
 
     protected String JSONbuilder(ArrayList<String> input) {
         String result = new String();
-        String prefix = new String("{\n \"text\": [\n ");
-        String suffix = new String("\n]}");
+        String prefix = new String("{\n \"text\": ");
+        String suffix = new String("\n}");
         return result;
     }
 
