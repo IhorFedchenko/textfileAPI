@@ -13,7 +13,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 
-
 @WebServlet("/")
 public class TextServlet extends HttpServlet {
 
@@ -51,7 +50,9 @@ public class TextServlet extends HttpServlet {
         try (InputStream inputstrm = ctx.getResourceAsStream("/WEB-INF/testfile.txt")) {
 
             String allText = new String(streamToString(inputstrm));
-            out.print(preJsonData(allText));
+            ArrayList<String> preJson = preJsonData(allText);
+            out.print(JSONbuilder(preJson));
+
 //            out.print("LIMIT: " + limit + " ");
 //            out.print("QUERY: " + q + " ");
 //            out.print("LENGTH: " + length + " ");
@@ -91,7 +92,7 @@ public class TextServlet extends HttpServlet {
     }
 
     protected ArrayList<String> preJsonData(String input) {
-        ArrayList<String> result = new ArrayList<String>();
+        ArrayList<String> result = new ArrayList<>();
         String analaze = new String(input);
 
 
@@ -113,14 +114,19 @@ public class TextServlet extends HttpServlet {
             }
         }
         return result;
-
     }
 
     protected String JSONbuilder(ArrayList<String> input) {
-        String result = new String();
+
         String prefix = new String("{\n \"text\": ");
         String suffix = new String("\n}");
+        ArrayList<String> jsonData = new ArrayList<>();
+        for (String json : jsonData) {
+            json = "\"".concat(json).concat("\"");
+
+        }
+        String result = new String(jsonData.toString());
+        result = prefix.concat(result).concat(suffix);
         return result;
     }
-
 }
