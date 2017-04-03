@@ -10,14 +10,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 @WebServlet("/")
 public class TextServlet extends HttpServlet {
 
 
     private static final long serialVersionUID = 1L;
-
+    //    integer which represents max number of chars in text that API should return.
     int limit;
+    //    string which represents text to search in file
     String q = new String();
     int length;
 
@@ -28,6 +30,7 @@ public class TextServlet extends HttpServlet {
         try {
             limit = Integer.parseInt(request.getParameter("limit"));
         } catch (Exception ex) {
+            //default limit
             limit = 10000;
             ex.printStackTrace();
 
@@ -60,8 +63,7 @@ public class TextServlet extends HttpServlet {
 
     protected String streamToString(InputStream input) {
 
-        int limit = this.limit;
-//        int count = 0;
+
         try {
             try (ByteArrayOutputStream result = new ByteArrayOutputStream()) {
                 byte[] buffer = new byte[1024];
@@ -69,12 +71,7 @@ public class TextServlet extends HttpServlet {
                 while ((length = input.read(buffer)) != -1) {
                     result.write(buffer, 0, length);
                 }
-                if (limit < result.toString("UTF-8").length()) {
-                    String strResult = new String(result.toString().substring(0, limit));
-                    return strResult;
-                } else {
-                    return result.toString("UTF-8");
-                }
+                return result.toString("UTF-8");
             }
 
         } catch (IOException e) {
@@ -83,4 +80,19 @@ public class TextServlet extends HttpServlet {
         }
 
     }
+    protected ArrayList<String> preJsonData(String input,int limit, String q, int length ){
+        ArrayList<String> result = new ArrayList<String>();
+        limit = this.limit;
+        length = this.length;
+        q = this.q;
+
+        return result;
+    }
+    protected String JSONbuilder(ArrayList<String> input) {
+        String result = new String();
+        String prefix = new String("{\n \"text\": [\n ");
+        String suffix = new String ("\n]}");
+        return result;
+    }
+
 }
