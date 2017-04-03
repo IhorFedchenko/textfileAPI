@@ -21,6 +21,7 @@ public class TextServlet extends HttpServlet {
     int limit;
     //    string which represents text to search in file
     String q = new String();
+    //    integer which represents max string length.
     int length;
 
 
@@ -30,7 +31,7 @@ public class TextServlet extends HttpServlet {
         try {
             limit = Integer.parseInt(request.getParameter("limit"));
         } catch (Exception ex) {
-            //default limit
+            //set default limit
             limit = 10000;
             ex.printStackTrace();
 
@@ -48,7 +49,7 @@ public class TextServlet extends HttpServlet {
         try (InputStream inputstrm = ctx.getResourceAsStream("/WEB-INF/testfile.txt")) {
 
             String allText = new String(streamToString(inputstrm));
-            out.print(allText);
+            out.print(preJsonData(allText));
 //            out.print("LIMIT: " + limit + " ");
 //            out.print("QUERY: " + q + " ");
 //            out.print("LENGTH: " + length + " ");
@@ -80,17 +81,31 @@ public class TextServlet extends HttpServlet {
         }
 
     }
-    protected ArrayList<String> preJsonData(String input,int limit, String q, int length ){
+
+    protected ArrayList<String> preJsonData(String input) {
         ArrayList<String> result = new ArrayList<String>();
-        limit = this.limit;
-        length = this.length;
-        q = this.q;
+        String analaze = new String(input);
+        // ?length=5&limit=300
+        if (q.isEmpty() & length > 0) {
+            while (!(analaze.isEmpty())) {
+                if (analaze.length() < length) {
+                    result.add(analaze);
+                    break;
+                }
+                if (analaze.length() > length) {
+                    result.add(analaze.substring(0, length));
+                    analaze = analaze.substring(length);
+                }
+            }
+        }
         return result;
+
     }
+
     protected String JSONbuilder(ArrayList<String> input) {
         String result = new String();
         String prefix = new String("{\n \"text\": [\n ");
-        String suffix = new String ("\n]}");
+        String suffix = new String("\n]}");
         return result;
     }
 
