@@ -28,7 +28,6 @@ public class TextServlet extends HttpServlet {
         try {
             limit = Integer.parseInt(request.getParameter("limit"));
         } catch (Exception ex) {
-            //default value
             limit = 10000;
             ex.printStackTrace();
 
@@ -45,33 +44,43 @@ public class TextServlet extends HttpServlet {
 
         try (InputStream inputstrm = ctx.getResourceAsStream("/WEB-INF/testfile.txt")) {
 
-    //        String allText = new String(streamToString(inputstrm));
-//            out.print(allText);
+            String allText = new String(streamToString(inputstrm));
+            out.print(allText);
 //            out.print("LIMIT: " + limit + " ");
 //            out.print("QUERY: " + q + " ");
 //            out.print("LENGTH: " + length + " ");
-            try {
-                try (ByteArrayOutputStream result = new ByteArrayOutputStream()) {
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    while ((length = inputstrm.read(buffer)) != -1) {
-                        result.write(buffer, 0, length);
-                    }
-                    if (limit < result.toString("UTF-8").length()) {
-                        String strResult = new String(result.toString().substring(0, limit));
-                        out.print(strResult);
-                    } else {
-                        out.print(result.toString("UTF-8"));
-                    }
-                }
 
-            } catch (IOException e) {
-                e.printStackTrace();
-
-            }
 
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
+
+
+    }
+
+    protected String streamToString(InputStream input) {
+
+        int limit = this.limit;
+//        int count = 0;
+        try {
+            try (ByteArrayOutputStream result = new ByteArrayOutputStream()) {
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = input.read(buffer)) != -1) {
+                    result.write(buffer, 0, length);
+                }
+                if (limit < result.toString("UTF-8").length()) {
+                    String strResult = new String(result.toString().substring(0, limit));
+                    return strResult;
+                } else {
+                    return result.toString("UTF-8");
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 }
