@@ -85,7 +85,6 @@ public class TextServlet extends HttpServlet {
         limit = this.limit;
         length = this.length;
         q = this.q;
-
         return result;
     }
     protected String JSONbuilder(ArrayList<String> input) {
