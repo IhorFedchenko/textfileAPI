@@ -53,9 +53,7 @@ public class TextServlet extends HttpServlet {
             ArrayList<String> preJson = preJsonData(allText);
             out.print(JSONbuilder(preJson));
 
-//            out.print("LIMIT: " + limit + " ");
-//            out.print("QUERY: " + q + " ");
-//            out.print("LENGTH: " + length + " ");
+
 
 
         } catch (IOException ex) {
